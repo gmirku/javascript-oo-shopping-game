@@ -2,22 +2,74 @@ let gameComplete = false;
 // Define the three constants here
 
 // Define the player object here
+const name = "unknown";
+const score = 0;
+const items = 0;
 
+let player = {
+  name,
+  score,
+  items,
+  getCurrentScore(){
+    return this.score;
+  },
+  addPoints(points){
+    this.score += points;
+  },
+  deductPoints(points){
+    this.score -= points;
+  }
+};
 // Define the Product class - write the Constructor function for Product class here
-
+function Product(id,name,price,expiryDate){
+  this.id=id;
+  this.name=name;
+  this.price=price;
+  this.expiryDate=expiryDate;
+}
 // Complete the dateDiff function
-const dateDiff = (date1, date2) => {};
+const dateDiff = (date1, date2) => {
+  const differenceInMilliseconds = Math.abs(date2-date1);
+  differenceInDays = Math.ceil(differenceInMilliseconds/(1000*60*60*24));
+  return differenceInDays;
+};
 
 // Here, use Object.defineProperty to create property - daysToExpire
-
+Object.defineProperty(Product,'daysToExpire',{ get(){
+  return dateDiff(this.expiryDate,new Date());
+}});
 // Add method getDetails to Product here
-
+Product.prototype.getDetails=function(){
+console.log(`Product Name: ${this.name} , Product Price: ${this.price}`);
+}
 // Define the MagicProduct class here
+const MagicProduct = {
+
+  MagicProduct(id,name,price,expiryDate,points,isBonus){
+    Product.call(this,id,name,price,expiryDate);
+    this.points = 0;
+    this.isBonus = 0;
+  }
+};
 
 // Establish inheritance between Product() & MagicProduct() here
-
+MagicProduct.prototype = Object.create(Product.prototype);
 // Define Rating class here
-
+class Rating{
+constructor(){
+  rate = "";
+}
+set rating(value){
+if (value >=1 && value < 10) { if(value > 1 && value <= 4)
+    rate = "OK";
+  else if(value <= 7)
+    rate = "GOOD";
+  else {
+    rate = "BAD";
+  }
+}
+}
+}
 // Complete the loadProducts function
 const loadProducts = (map, prodId) => {
     let a = new Array();
@@ -252,7 +304,7 @@ function init(data) {
                 } else {
                     let iCount = ++player.items;
                     // Make the Object.defineProperty() call here to set the value of items using the value of iCount
-                    
+
                     if (player.items < 10) {
                         shop(prodList, totalBill);
                     } else {
@@ -282,9 +334,9 @@ function init(data) {
                 rateAndExit();
             } else {
                 // Call rating setter method of playerRating to set user entered rate value here
-                
+
                 // Call Object.assign() method here to populate target
-                
+
                 console.log(`${target.name} you rated this game as ${target.rate}`.green);
                 console.log("Thank you for your valuable feedback.".blue);
                 rl.close();
@@ -301,7 +353,7 @@ function init(data) {
 
     // Complete this function
     const exitWon = () => {
-        let finalStatus; 
+        let finalStatus;
         console.log(`Congratulations!!! You became ${finalStatus}!`.blue);
         rateAndExit();
     };
@@ -369,6 +421,3 @@ function init(data) {
     exports.exitLost = exitLost;
     exports.exitWon = exitWon;
     exports.main = main;
-
-
-
